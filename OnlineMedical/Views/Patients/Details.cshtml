@@ -1,0 +1,58 @@
+﻿@model OnlineMedical.Patient
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Patient</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Patient_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Patient_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Patient_Date_of_Birth)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Patient_Date_of_Birth)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Patient_Gender)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Patient_Gender)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Patient_Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Patient_Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Patient_Phone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Patient_Phone)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Patient_ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

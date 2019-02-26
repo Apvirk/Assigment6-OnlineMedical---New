@@ -1,0 +1,402 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MedicalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Doctor">
+          <Key>
+            <PropertyRef Name="Doctor_ID" />
+          </Key>
+          <Property Name="Doctor_ID" Type="varchar" MaxLength="13" Nullable="false" />
+          <Property Name="Doctor_Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Doctor_Phone" Type="int" Nullable="false" />
+          <Property Name="Doctor_Department" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Doctor_Address" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Invoice">
+          <Key>
+            <PropertyRef Name="Invoice_ID" />
+          </Key>
+          <Property Name="Invoice_ID" Type="varchar" MaxLength="13" Nullable="false" />
+          <Property Name="Patient_ID" Type="varchar" MaxLength="13" Nullable="false" />
+          <Property Name="RN_Charge" Type="int" Nullable="false" />
+          <Property Name="Doctor_Charge" Type="int" Nullable="false" />
+          <Property Name="Prescription_Charge" Type="int" Nullable="false" />
+          <Property Name="Lab_Charge" Type="int" Nullable="false" />
+          <Property Name="Procedure_Charge" Type="int" Nullable="false" />
+          <Property Name="No_of_days" Type="int" Nullable="false" />
+          <Property Name="Provider_Group_No" Type="varchar" MaxLength="13" />
+        </EntityType>
+        <EntityType Name="Lab">
+          <Key>
+            <PropertyRef Name="Lab_ID" />
+          </Key>
+          <Property Name="Lab_ID" Type="varchar" MaxLength="13" Nullable="false" />
+          <Property Name="Doctor_ID" Type="varchar" MaxLength="13" Nullable="false" />
+          <Property Name="Lab_Date" Type="datetime" Nullable="false" />
+          <Property Name="Patient_ID" Type="varchar" MaxLength="13" Nullable="false" />
+          <Property Name="Invoice_Amount" Type="int" Nullable="false" />
+          <Property Name="Lab_Procedure" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Patient">
+          <Key>
+            <PropertyRef Name="Patient_ID" />
+          </Key>
+          <Property Name="Patient_ID" Type="varchar" MaxLength="13" Nullable="false" />
+          <Property Name="Patient_Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Patient_Date_of_Birth" Type="datetime" Nullable="false" />
+          <Property Name="Patient_Gender" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="Patient_Address" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Patient_Phone" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Provider">
+          <Key>
+            <PropertyRef Name="PR_Group_ID" />
+          </Key>
+          <Property Name="PR_Group_ID" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="PR_Group_Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PR_Group_Address" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_InPatient">
+          <Key>
+            <PropertyRef Name="InPatient_ID" />
+            <PropertyRef Name="Room_ID" />
+          </Key>
+          <Property Name="InPatient_ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Lab_ID" Type="varchar" MaxLength="13" Nullable="false" />
+          <Property Name="Patient_Status" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Admission_Date" Type="datetime" Nullable="false" />
+          <Property Name="Discharge_Time" Type="datetime" Nullable="false" />
+          <Property Name="Room_ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Room_Type" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="Room_Status" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_InPatientLab">
+          <End Role="Lab" Type="Self.Lab" Multiplicity="1" />
+          <End Role="tbl_InPatient" Type="Self.tbl_InPatient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lab">
+              <PropertyRef Name="Lab_ID" />
+            </Principal>
+            <Dependent Role="tbl_InPatient">
+              <PropertyRef Name="Lab_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvoicePatient">
+          <End Role="Patient" Type="Self.Patient" Multiplicity="1" />
+          <End Role="Invoice" Type="Self.Invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="Patient_ID" />
+            </Principal>
+            <Dependent Role="Invoice">
+              <PropertyRef Name="Patient_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LabDoctor">
+          <End Role="Doctor" Type="Self.Doctor" Multiplicity="1" />
+          <End Role="Lab" Type="Self.Lab" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctor">
+              <PropertyRef Name="Doctor_ID" />
+            </Principal>
+            <Dependent Role="Lab">
+              <PropertyRef Name="Doctor_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LabPatient">
+          <End Role="Patient" Type="Self.Patient" Multiplicity="1" />
+          <End Role="Lab" Type="Self.Lab" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="Patient_ID" />
+            </Principal>
+            <Dependent Role="Lab">
+              <PropertyRef Name="Patient_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MedicalModelStoreContainer">
+          <EntitySet Name="Doctor" EntityType="Self.Doctor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Invoice" EntityType="Self.Invoice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Lab" EntityType="Self.Lab" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Patient" EntityType="Self.Patient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Provider" EntityType="Self.Provider" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_InPatient" EntityType="Self.tbl_InPatient" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_InPatientLab" Association="Self.FK_InPatientLab">
+            <End Role="Lab" EntitySet="Lab" />
+            <End Role="tbl_InPatient" EntitySet="tbl_InPatient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvoicePatient" Association="Self.FK_InvoicePatient">
+            <End Role="Patient" EntitySet="Patient" />
+            <End Role="Invoice" EntitySet="Invoice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LabDoctor" Association="Self.FK_LabDoctor">
+            <End Role="Doctor" EntitySet="Doctor" />
+            <End Role="Lab" EntitySet="Lab" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LabPatient" Association="Self.FK_LabPatient">
+            <End Role="Patient" EntitySet="Patient" />
+            <End Role="Lab" EntitySet="Lab" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MedicalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Doctor">
+          <Key>
+            <PropertyRef Name="Doctor_ID" />
+          </Key>
+          <Property Name="Doctor_ID" Type="String" MaxLength="13" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Doctor_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Doctor_Phone" Type="Int32" Nullable="false" />
+          <Property Name="Doctor_Department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Doctor_Address" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Labs" Relationship="Self.FK_LabDoctor" FromRole="Doctor" ToRole="Lab" />
+        </EntityType>
+        <EntityType Name="Invoice">
+          <Key>
+            <PropertyRef Name="Invoice_ID" />
+          </Key>
+          <Property Name="Invoice_ID" Type="String" MaxLength="13" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Patient_ID" Type="String" MaxLength="13" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RN_Charge" Type="Int32" Nullable="false" />
+          <Property Name="Doctor_Charge" Type="Int32" Nullable="false" />
+          <Property Name="Prescription_Charge" Type="Int32" Nullable="false" />
+          <Property Name="Lab_Charge" Type="Int32" Nullable="false" />
+          <Property Name="Procedure_Charge" Type="Int32" Nullable="false" />
+          <Property Name="No_of_days" Type="Int32" Nullable="false" />
+          <Property Name="Provider_Group_No" Type="String" MaxLength="13" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Patient" Relationship="MedicalModel.FK_InvoicePatient" FromRole="Invoice" ToRole="Patient" />
+        </EntityType>
+        <EntityType Name="Lab">
+          <Key>
+            <PropertyRef Name="Lab_ID" />
+          </Key>
+          <Property Name="Lab_ID" Type="String" MaxLength="13" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Doctor_ID" Type="String" MaxLength="13" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Lab_Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Patient_ID" Type="String" MaxLength="13" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Invoice_Amount" Type="Int32" Nullable="false" />
+          <Property Name="Lab_Procedure" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Doctor" Relationship="Self.FK_LabDoctor" FromRole="Lab" ToRole="Doctor" />
+          <NavigationProperty Name="tbl_InPatient" Relationship="Self.FK_InPatientLab" FromRole="Lab" ToRole="tbl_InPatient" />
+          <NavigationProperty Name="Patient" Relationship="MedicalModel.FK_LabPatient" FromRole="Lab" ToRole="Patient" />
+        </EntityType>
+        <EntityType Name="Provider">
+          <Key>
+            <PropertyRef Name="PR_Group_ID" />
+          </Key>
+          <Property Name="PR_Group_ID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PR_Group_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PR_Group_Address" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_InPatient">
+          <Key>
+            <PropertyRef Name="InPatient_ID" />
+            <PropertyRef Name="Room_ID" />
+          </Key>
+          <Property Name="InPatient_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Lab_ID" Type="String" MaxLength="13" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Patient_Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Admission_Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Discharge_Time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Room_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Room_Type" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Room_Status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Lab" Relationship="Self.FK_InPatientLab" FromRole="tbl_InPatient" ToRole="Lab" />
+        </EntityType>
+        <Association Name="FK_LabDoctor">
+          <End Role="Doctor" Type="Self.Doctor" Multiplicity="1" />
+          <End Role="Lab" Type="Self.Lab" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctor">
+              <PropertyRef Name="Doctor_ID" />
+            </Principal>
+            <Dependent Role="Lab">
+              <PropertyRef Name="Doctor_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InPatientLab">
+          <End Role="Lab" Type="Self.Lab" Multiplicity="1" />
+          <End Role="tbl_InPatient" Type="Self.tbl_InPatient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lab">
+              <PropertyRef Name="Lab_ID" />
+            </Principal>
+            <Dependent Role="tbl_InPatient">
+              <PropertyRef Name="Lab_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MedicalEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Doctors" EntityType="Self.Doctor" />
+          <EntitySet Name="Invoices" EntityType="Self.Invoice" />
+          <EntitySet Name="Labs" EntityType="Self.Lab" />
+          <EntitySet Name="Providers" EntityType="Self.Provider" />
+          <EntitySet Name="tbl_InPatient" EntityType="Self.tbl_InPatient" />
+          <AssociationSet Name="FK_LabDoctor" Association="Self.FK_LabDoctor">
+            <End Role="Doctor" EntitySet="Doctors" />
+            <End Role="Lab" EntitySet="Labs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InPatientLab" Association="Self.FK_InPatientLab">
+            <End Role="Lab" EntitySet="Labs" />
+            <End Role="tbl_InPatient" EntitySet="tbl_InPatient" />
+          </AssociationSet>
+          <EntitySet Name="Patients" EntityType="MedicalModel.Patient" />
+          <AssociationSet Name="FK_InvoicePatient" Association="MedicalModel.FK_InvoicePatient">
+            <End Role="Patient" EntitySet="Patients" />
+            <End Role="Invoice" EntitySet="Invoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LabPatient" Association="MedicalModel.FK_LabPatient">
+            <End Role="Patient" EntitySet="Patients" />
+            <End Role="Lab" EntitySet="Labs" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Patient">
+          <Key>
+            <PropertyRef Name="Patient_ID" />
+          </Key>
+          <Property Name="Patient_ID" Type="String" Nullable="false" MaxLength="13" FixedLength="false" Unicode="false" />
+          <Property Name="Patient_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Patient_Date_of_Birth" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Patient_Gender" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="Patient_Address" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Patient_Phone" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Invoices" Relationship="MedicalModel.FK_InvoicePatient" FromRole="Patient" ToRole="Invoice" />
+          <NavigationProperty Name="Labs" Relationship="MedicalModel.FK_LabPatient" FromRole="Patient" ToRole="Lab" />
+        </EntityType>
+        <Association Name="FK_InvoicePatient">
+          <End Type="MedicalModel.Patient" Role="Patient" Multiplicity="1" />
+          <End Type="MedicalModel.Invoice" Role="Invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="Patient_ID" />
+            </Principal>
+            <Dependent Role="Invoice">
+              <PropertyRef Name="Patient_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LabPatient">
+          <End Type="MedicalModel.Patient" Role="Patient" Multiplicity="1" />
+          <End Type="MedicalModel.Lab" Role="Lab" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="Patient_ID" />
+            </Principal>
+            <Dependent Role="Lab">
+              <PropertyRef Name="Patient_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MedicalModelStoreContainer" CdmEntityContainer="MedicalEntities">
+          <EntitySetMapping Name="Doctors">
+            <EntityTypeMapping TypeName="MedicalModel.Doctor">
+              <MappingFragment StoreEntitySet="Doctor">
+                <ScalarProperty Name="Doctor_ID" ColumnName="Doctor_ID" />
+                <ScalarProperty Name="Doctor_Name" ColumnName="Doctor_Name" />
+                <ScalarProperty Name="Doctor_Phone" ColumnName="Doctor_Phone" />
+                <ScalarProperty Name="Doctor_Department" ColumnName="Doctor_Department" />
+                <ScalarProperty Name="Doctor_Address" ColumnName="Doctor_Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Invoices">
+            <EntityTypeMapping TypeName="MedicalModel.Invoice">
+              <MappingFragment StoreEntitySet="Invoice">
+                <ScalarProperty Name="Invoice_ID" ColumnName="Invoice_ID" />
+                <ScalarProperty Name="Patient_ID" ColumnName="Patient_ID" />
+                <ScalarProperty Name="RN_Charge" ColumnName="RN_Charge" />
+                <ScalarProperty Name="Doctor_Charge" ColumnName="Doctor_Charge" />
+                <ScalarProperty Name="Prescription_Charge" ColumnName="Prescription_Charge" />
+                <ScalarProperty Name="Lab_Charge" ColumnName="Lab_Charge" />
+                <ScalarProperty Name="Procedure_Charge" ColumnName="Procedure_Charge" />
+                <ScalarProperty Name="No_of_days" ColumnName="No_of_days" />
+                <ScalarProperty Name="Provider_Group_No" ColumnName="Provider_Group_No" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Labs">
+            <EntityTypeMapping TypeName="MedicalModel.Lab">
+              <MappingFragment StoreEntitySet="Lab">
+                <ScalarProperty Name="Lab_ID" ColumnName="Lab_ID" />
+                <ScalarProperty Name="Doctor_ID" ColumnName="Doctor_ID" />
+                <ScalarProperty Name="Lab_Date" ColumnName="Lab_Date" />
+                <ScalarProperty Name="Patient_ID" ColumnName="Patient_ID" />
+                <ScalarProperty Name="Invoice_Amount" ColumnName="Invoice_Amount" />
+                <ScalarProperty Name="Lab_Procedure" ColumnName="Lab_Procedure" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Providers">
+            <EntityTypeMapping TypeName="MedicalModel.Provider">
+              <MappingFragment StoreEntitySet="Provider">
+                <ScalarProperty Name="PR_Group_ID" ColumnName="PR_Group_ID" />
+                <ScalarProperty Name="PR_Group_Name" ColumnName="PR_Group_Name" />
+                <ScalarProperty Name="PR_Group_Address" ColumnName="PR_Group_Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_InPatient">
+            <EntityTypeMapping TypeName="MedicalModel.tbl_InPatient">
+              <MappingFragment StoreEntitySet="tbl_InPatient">
+                <ScalarProperty Name="InPatient_ID" ColumnName="InPatient_ID" />
+                <ScalarProperty Name="Lab_ID" ColumnName="Lab_ID" />
+                <ScalarProperty Name="Patient_Status" ColumnName="Patient_Status" />
+                <ScalarProperty Name="Admission_Date" ColumnName="Admission_Date" />
+                <ScalarProperty Name="Discharge_Time" ColumnName="Discharge_Time" />
+                <ScalarProperty Name="Room_ID" ColumnName="Room_ID" />
+                <ScalarProperty Name="Room_Type" ColumnName="Room_Type" />
+                <ScalarProperty Name="Room_Status" ColumnName="Room_Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Patients">
+            <EntityTypeMapping TypeName="MedicalModel.Patient">
+              <MappingFragment StoreEntitySet="Patient">
+                <ScalarProperty Name="Patient_Phone" ColumnName="Patient_Phone" />
+                <ScalarProperty Name="Patient_Address" ColumnName="Patient_Address" />
+                <ScalarProperty Name="Patient_Gender" ColumnName="Patient_Gender" />
+                <ScalarProperty Name="Patient_Date_of_Birth" ColumnName="Patient_Date_of_Birth" />
+                <ScalarProperty Name="Patient_Name" ColumnName="Patient_Name" />
+                <ScalarProperty Name="Patient_ID" ColumnName="Patient_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

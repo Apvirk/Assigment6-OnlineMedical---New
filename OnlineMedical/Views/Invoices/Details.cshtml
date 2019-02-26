@@ -1,0 +1,82 @@
+﻿@model OnlineMedical.Invoice
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Invoice</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RN_Charge)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RN_Charge)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Doctor_Charge)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Doctor_Charge)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Prescription_Charge)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Prescription_Charge)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Lab_Charge)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Lab_Charge)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Procedure_Charge)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Procedure_Charge)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.No_of_days)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.No_of_days)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Provider_Group_No)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Provider_Group_No)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Patient.Patient_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Patient.Patient_Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Invoice_ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
